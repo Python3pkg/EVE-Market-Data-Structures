@@ -74,7 +74,7 @@ def encode_to_json(history_list):
     :rtype: str
     """
     rowsets = []
-    for items_in_region_list in history_list._history.values():
+    for items_in_region_list in list(history_list._history.values()):
         region_id = items_in_region_list.region_id
         type_id = items_in_region_list.type_id
         generated_at = gen_iso_datetime_str(items_in_region_list.generated_at)

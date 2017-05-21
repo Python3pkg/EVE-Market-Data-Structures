@@ -80,7 +80,7 @@ def encode_to_json(order_list):
     :rtype: str
     """
     rowsets = []
-    for items_in_region_list in order_list._orders.values():
+    for items_in_region_list in list(order_list._orders.values()):
         region_id = items_in_region_list.region_id
         type_id = items_in_region_list.type_id
         generated_at = gen_iso_datetime_str(items_in_region_list.generated_at)

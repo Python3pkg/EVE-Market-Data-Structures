@@ -22,7 +22,7 @@ subscriber.connect(receiver_uri)
 # Disable filtering.
 subscriber.setsockopt(zmq.SUBSCRIBE, "")
 
-print("Connected to %s" % receiver_uri)
+print(("Connected to %s" % receiver_uri))
 
 while True:
     # Receive raw market JSON strings.
@@ -35,14 +35,14 @@ while True:
 
     if market_list.list_type == 'orders':
         # This is a market order message.
-        print "* Recieved Orders from: %s" % market_list.order_generator
+        print("* Recieved Orders from: %s" % market_list.order_generator)
 
         for order in market_list:
             # You can mess with the MarketOrder in here.
             pass
     else:
         # This is a history message.
-        print "* Received History from: %s" % market_list.history_generator
+        print("* Received History from: %s" % market_list.history_generator)
 
         for history in market_list:
             # You can mess with the MarketHistoryEntry in here.

@@ -48,7 +48,7 @@ class MarketOrderList(object):
         """
         list_repr = "<MarketOrderList: \n"
 
-        for order_list in [olist.orders for olist in self._orders.values()]:
+        for order_list in [olist.orders for olist in list(self._orders.values())]:
             for order in order_list:
                 list_repr += repr(order)
 
@@ -63,7 +63,7 @@ class MarketOrderList(object):
         :returns: The number of orders contained within the list.
         """
         total = 0
-        for orders in self._orders.values():
+        for orders in list(self._orders.values()):
             total += len(orders)
         return total
 
@@ -99,7 +99,7 @@ class MarketOrderList(object):
         :rtype: generator
         :returns: Generates a list of :py:class:`MarketOrder` instances.
         """
-        for olist in self._orders.values():
+        for olist in list(self._orders.values()):
             for order in olist.orders:
                 yield order
 
@@ -115,7 +115,7 @@ class MarketOrderList(object):
         :returns: Generates a list of :py:class:`MarketItemsInRegionList`
             instances, which contain :py:class:`MarketOrder` instances.
         """
-        for olist in self._orders.values():
+        for olist in list(self._orders.values()):
             yield olist
 
     def add_order(self, order):
@@ -128,7 +128,7 @@ class MarketOrderList(object):
         """
         # This key is used to group the orders based on region.
         key = '%s_%s' % (order.region_id, order.type_id)
-        if not self._orders.has_key(key):
+        if key not in self._orders:
             # We don't have any orders for this yet. Prep the region+item
             # combo by instantiating a new MarketItemsInRegionList for
             # the MarketOrders.
@@ -160,7 +160,7 @@ class MarketOrderList(object):
             called. This failsafe may be disabled by passing False here.
         """
         key = '%s_%s' % (region_id, type_id)
-        if error_if_orders_present and self._orders.has_key(key):
+        if error_if_orders_present and key in self._orders:
             raise ItemAlreadyPresentError(
                 "Orders already exist for the given region and type ID. "
                 "Pass error_if_orders_present=False to disable this failsafe, "
@@ -366,7 +366,7 @@ class MarketHistoryList(object):
         total number of orders contained within.
         """
         total = 0
-        for orders in self._history.values():
+        for orders in list(self._history.values()):
             total += len(orders)
         return total
 
@@ -379,7 +379,7 @@ class MarketHistoryList(object):
         :rtype: generator
         :returns: Generates a list of :py:class:`MarketHistoryEntry` instances.
         """
-        for entry_list in self._history.values():
+        for entry_list in list(self._history.values()):
             for entry in entry_list:
                 yield entry
 
@@ -410,7 +410,7 @@ class MarketHistoryList(object):
         """
         list_repr = "<MarketHistoryList: \n"
 
-        for history_entry_list in self._history.values():
+        for history_entry_list in list(self._history.values()):
             for entry in history_entry_list:
                 list_repr += repr(entry)
 
@@ -427,7 +427,7 @@ class MarketHistoryList(object):
         :rtype: generator
         :returns: Generates a list of :py:class:`MarketHistoryEntry` instances.
         """
-        for entry_list in self._history.values():
+        for entry_list in list(self._history.values()):
             for entry in entry_list:
                 yield entry
 
@@ -443,7 +443,7 @@ class MarketHistoryList(object):
         :returns: Generates a list of :py:class:`HistoryItemsInRegion`
             instances, which contain :py:class:`MarketHistoryEntry` instances.
         """
-        for history_entry_list in self._history.values():
+        for history_entry_list in list(self._history.values()):
             yield history_entry_list
 
     def add_entry(self, entry):
@@ -457,7 +457,7 @@ class MarketHistoryList(object):
         """
         # This key is used to group the orders based on region.
         key = '%s_%s' % (entry.region_id, entry.type_id)
-        if not self._history.has_key(key):
+        if key not in self._history:
             # We don't have any orders for this yet. Prep the region+item
             # combo by instantiating a new MarketItemsInRegionList for
             # the MarketOrders.
@@ -489,7 +489,7 @@ class MarketHistoryList(object):
             called. This failsafe may be disabled by passing False here.
         """
         key = '%s_%s' % (region_id, type_id)
-        if error_if_entries_present and self._history.has_key(key):
+        if error_if_entries_present and key in self._history:
             raise ItemAlreadyPresentError(
                 "Orders already exist for the given region and type ID. "
                 "Pass error_if_orders_present=False to disable this failsafe, "

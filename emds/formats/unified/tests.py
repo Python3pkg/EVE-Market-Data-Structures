@@ -63,7 +63,7 @@ class UnifiedSerializationTests(BaseSerializationCase):
         # Encode the sample order list.
         encoded_orderlist = unified.encode_to_json(self.order_list)
         # Should return a string JSON representation.
-        self.assertIsInstance(encoded_orderlist, basestring)
+        self.assertIsInstance(encoded_orderlist, str)
         # De-code the JSON to instantiate a list of MarketOrder instances that
         # should be identical to self.orderlist.
         decoded_list = unified.parse_from_json(encoded_orderlist)
@@ -81,7 +81,7 @@ class UnifiedSerializationTests(BaseSerializationCase):
         # Encode the sample history instance.
         encoded_history = unified.encode_to_json(self.history)
         # Should return a string JSON representation.
-        self.assertIsInstance(encoded_history, basestring)
+        self.assertIsInstance(encoded_history, str)
         # De-code the JSON to instantiate a MarketHistoryList instances that
         # should be identical to self.orderlist.
         decoded_list = unified.parse_from_json(encoded_history)
@@ -176,13 +176,13 @@ class UnifiedSerializationTests(BaseSerializationCase):
         decoded_list = unified.parse_from_json(data)
         self.assertIsInstance(decoded_list, MarketOrderList)
         # There should be two item+region combos.
-        self.assertEqual(len(decoded_list._orders.keys()), 2)
+        self.assertEqual(len(list(decoded_list._orders.keys())), 2)
         # Now make sure there are three.
         self.assertEqual(len(decoded_list), 3)
         # These are regionID_itemID. Make sure the keys are set correctly.
         self.assertItemsEqual(
             ['10000065_11134', '10000066_11135'],
-            decoded_list._orders.keys()
+            list(decoded_list._orders.keys())
         )
 
         # Re-encode for JSON and do some basic checks for sanity.
@@ -201,9 +201,9 @@ class UnifiedSerializationTests(BaseSerializationCase):
             first_rowset = re_decoded_list['rowsets'][0]
             # Check for the empty rowsets with all data intact.
             self.assertListEqual(rowset['rows'], [])
-            self.assertTrue(first_rowset.has_key('generatedAt'))
-            self.assertTrue(first_rowset.has_key('regionID'))
-            self.assertTrue(first_rowset.has_key('typeID'))
+            self.assertTrue('generatedAt' in first_rowset)
+            self.assertTrue('regionID' in first_rowset)
+            self.assertTrue('typeID' in first_rowset)
 
     def test_simple_history_deserialization(self):
         """
@@ -271,6 +271,6 @@ class UnifiedSerializationTests(BaseSerializationCase):
         first_rowset = re_decoded_list['rowsets'][0]
         # Check for the empty rowsets with all data intact.
         self.assertListEqual(first_rowset['rows'], [])
-        self.assertTrue(first_rowset.has_key('generatedAt'))
-        self.assertTrue(first_rowset.has_key('regionID'))
-        self.assertTrue(first_rowset.has_key('typeID'))
+        self.assertTrue('generatedAt' in first_rowset)
+        self.assertTrue('regionID' in first_rowset)
+        self.assertTrue('typeID' in first_rowset)
